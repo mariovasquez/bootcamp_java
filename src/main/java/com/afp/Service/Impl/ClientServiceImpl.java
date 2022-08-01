@@ -31,9 +31,9 @@ public class ClientServiceImpl implements IClientService {
 
     @Override
     public Client create(Client request) {
-        if (!existUser(request.getDni())) {
+        if (!existsClient(request.getDni())) {
             try {
-                if (validUser(request)) {
+                if (validateUser(request)) {
                     Client user = constructorUser(request);
                     this.afpRepository.save(user.getAfp());
                     return this.clientRepository.save(user);
@@ -42,9 +42,21 @@ public class ClientServiceImpl implements IClientService {
                 throw e;
             }
         }
-        throw new ModelNotFoundException("DNI ya esta registrado");
+        throw new ModelNotFoundException("DNI ya se encuentra registrado.");
+    }
+    
+    @Override
+    public Client update(Client request, String id) {
+    	request.setDni(id);
+        return this.clientRepository.save(request);
     }
 
+    @Override
+    public Client delete(String id) {
+        this.clientRepository.deleteById(id);
+        throw new ModelNotFoundException("El cliente ha sido eliminado.");
+    }
+    
     private Client constructorUser(Client request) {
         AFP afp = AFP.builder()
                             .numberAccount(request.getName().charAt(0) + request.getDni())
@@ -66,7 +78,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     // Valida los atributos del usuario
-    private boolean validUser(Client request) {
+    private boolean validateUser(Client request) {
         if (request.getDni().length() == 8) {
             if (request.getPhone().length() == 9) {
                 return true;
@@ -78,20 +90,10 @@ public class ClientServiceImpl implements IClientService {
 
 
     // Busca por id
-    private boolean existUser(String id) {
+    private boolean existsClient(String id) {
         return this.clientRepository.existsById(id);
     }
 
-    @Override
-    public Client update(Client request, String id) {
-    	request.setDni(id);
-        return this.clientRepository.save(request);
-    }
-
-    @Override
-    public Client delete(String id) {
-        this.clientRepository.deleteById(id);
-        throw new ModelNotFoundException("El cliente ha sido eliminado.");
-    }
+    
     
 }

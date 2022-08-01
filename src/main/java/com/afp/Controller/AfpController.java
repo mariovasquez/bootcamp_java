@@ -24,13 +24,13 @@ public class AfpController {
 
     @GetMapping(path = "/get", params = "id")
     public AFP getById(@RequestParam String id) {
-        log.info("Se retorno retiro");
+        log.info("GetByID Withdrawal");
         return this.afpService.get(id);
     }
 
     @PostMapping(path = "/create")
     public AFP create(@RequestParam float withdrawal, @RequestParam String id) {
-        log.info("Nuevo registro: {}", id);
+        log.info("New entry: {}", id);
         return this.afpService.create(id, withdrawal);
     }
     

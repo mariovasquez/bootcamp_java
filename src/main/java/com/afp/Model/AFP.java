@@ -1,6 +1,7 @@
 package com.afp.Model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,6 +37,6 @@ public class AFP {
 
     @JsonFormat(pattern = "dd::MM::yyyy KK:mm a")
     @Column(name = "withdrawal_date", unique = false, nullable = true)
-    private LocalDateTime withdrawalDate;
+    private Date withdrawalDate;
 
 }

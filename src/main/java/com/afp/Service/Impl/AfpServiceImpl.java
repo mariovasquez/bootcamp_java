@@ -1,7 +1,10 @@
 package com.afp.Service.Impl;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.stream.Collectors;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +34,12 @@ public class AfpServiceImpl implements IAfpService {
 
     @Override
     public AFP create(String id, float withdrawal) {
-        if (existAfo(id)) {
+        if (existAfpAccount(id)) {
             try {
-                if (validAfp(id, withdrawal)) {
+                if (validateAfpAccount(id, withdrawal)) {
                     AFP afp = this.afpRepository.getById(id);
                     afp.setWithdrawal(withdrawal);
-                    String date = "2023-12-03T10:15:30";
-                    afp.setWithdrawalDate(null);
+                    afp.setWithdrawalDate(new Date());
                     return this.afpRepository.save(afp);
                 }
             } catch (Exception e) {
@@ -46,16 +48,17 @@ public class AfpServiceImpl implements IAfpService {
         }
         throw new ModelNotFoundException("El id de la cuenta AFP no existe.");
     }
-    private boolean existAfo(String id) {
-        return this.afpRepository.existsById(id);
-    }
 
-    private boolean validAfp(String id, float withdrawal) {
+    private boolean validateAfpAccount(String id, float withdrawal) {
         AFP afp = this.afpRepository.getById(id);
         if (afp.getAmount() /2 < withdrawal) {
             return true;
         }
         throw new ModelNotFoundException("El retiro tiene que ser mayor al 50% disponible.");
+    }
+    
+    private boolean existAfpAccount(String id) {
+        return this.afpRepository.existsById(id);
     }
     
 }

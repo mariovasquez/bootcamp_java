@@ -29,25 +29,25 @@ public class ClientController {
 
     @GetMapping(path = "/findall")
     public List<Client> findAll() {
-        log.info("Se retorno un finAll");
+        log.info("FindAll Clients");
         return this.clientService.findAll();
     }
 
     @PostMapping("/create")
     public Client create(@RequestBody Client request) {
-        log.info("Nuevo registro: {}", request);
+        log.info("New entry: {}", request);
         return this.clientService.create(request);
     }
 
     @PutMapping(path =  "/update", params = "id")
     public Client update(@RequestParam String id, @RequestBody Client request) {
-        log.info("Actualizo registro: {}", request);
+        log.info("Updated entry: {}", request);
         return this.clientService.update(request, id);
     }
 
     @DeleteMapping(path = "/delete", params = "id")
     public Client delete(@RequestParam String id) {
-        log.info("Elimino registro: {}", id);
+        log.info("Deleted entry: {}", id);
         this.clientService.delete(id);
         return null;
     }
